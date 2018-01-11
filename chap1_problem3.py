@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt  # import statements for plotting purposes
 
 """
 Benjamin Klimko, PHYS 416 Spring 2018
+The program takes no inputs
 This program recreates a series of plots from the textbook as an exercise to become comfortable with Python
 Running the program will produce four subplots on the same figure; the non-labeled functions are as follows:
 --dashed red line: exp(-x/4)
@@ -57,14 +58,17 @@ plt.xlabel('x')
 plt.ylabel('f(x)')
 plt.title(r'f(x)=exp(-x)$*sin(x)^2$')
 plt.grid(True)
-# TODO FIGURE OUT HOW TO MAKE THIS LOOK MORE RIGHT
+# adjust axis limits
+ax = plt.gca()
+ax.set_xlim(0, 20)
+ax.set_ylim(10e-10, 10e0)
+plt.tight_layout()
 
 # graph the fourth subplot, give axis labels, set axis ticks
 plt.subplot(2, 2, 4, projection='polar')
 plt.plot(theta, func5)
-ax = plt.gca()
-
-# TODO stuck with editing the details of the polar plot
+ax2 = plt.gca()
+ax2.set_rlim(0,1)
 
 # display the graphs
 plt.show()

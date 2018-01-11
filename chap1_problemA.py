@@ -1,6 +1,12 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 
+"""
+Benjamin Klimko, PHYS 416 Spring 2018
+The program has a hardcoded input n, which can be altered prior to running the program.
+The program outputs a graph showing the computed number versus iteration for the hailstone (3n+1) problem
+"""
+
 # set input value here and initialize iteration counter
 n = 27
 original_n = np.copy(n)
