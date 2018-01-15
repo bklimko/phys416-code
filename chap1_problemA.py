@@ -10,7 +10,7 @@ The program outputs a graph showing the computed number versus iteration for the
 # set input value here and initialize iteration counter
 n = 27
 original_n = np.copy(n)
-count = 0
+count = 1
 
 # create arrays to hold both iteration values and computed numbers
 iteration = np.array([0])
