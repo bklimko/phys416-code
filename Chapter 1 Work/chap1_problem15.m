@@ -1,6 +1,9 @@
 % interp - Program to interpolate data using Lagrange 
 % polynomial to fit quadratic to three data points
-clear all; help interp;  % Clear memory and print header
+%script and intrpf.m function originally by Frank Toffoletto,
+%edited by Benjamin Klimko, PHYS 416, Spring 2018
+
+clear all;   % Clear memory
 %* Initialize the data points to be fit by quadratic
 disp('Enter data points as x,y pairs (e.g., [1 2])');
 for i=1:3
