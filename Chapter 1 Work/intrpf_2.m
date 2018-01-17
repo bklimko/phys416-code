@@ -12,13 +12,17 @@ function yi = intrpf_2(xi,x,y)
 
 %* Calculate yi = p(xi) using Lagrange polynomial
 yi = 0;
+
 for p = 1:length(x) %loop to calculate summation
-    tempval = 1;
-    for q = 1:length(x) %loop to calculate product
-        if p ~= q
-            tempval = tempval * (((xi-x(q))/(x(p)-x(q)))*y(p));
-        end
+    num = 1;
+    denom = 1;
+    x_altered = x([1:p-1, p+1:end]);
+    for q = x_altered %loop to calculate product
+        num = num*(xi-q);
+        denom = denom * (x(p) - q);
     end
-    yi = yi + tempval;
+    y_0 = (num * y(p))/denom;
+    yi = yi + y_0;
+    
 end
 return;
