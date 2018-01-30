@@ -5,6 +5,23 @@ import numpy as np
 #Code originally by Frank Toffoletto, edited by B. Klimko
 # The program calculates the height of two objects numerically and then based on theory and plots all
 
+# define interpolation functions
+def intrpf(xi, x, y):
+	yi = 0
+	for q in range(0, len(y)):
+		yi = yi + mult(xi, x, y, q)
+	return yi
+
+def mult(xi, x, y, q):
+	num = 1.0
+	denom = 1.0
+	xnew = np.delete(x,q)
+	for p in xnew:
+		num = num*(xi-p)
+		denom = denom*(x[q]-p)
+	y_out = num*y[q]/denom
+	return y_out
+
 def balle_2(y1,speed, theta):  # compute two objects at once
 	r1 = np.array([0.0, y1]);     # Initial vector position
 	r2 = np.array([0.0, y1])
@@ -84,6 +101,9 @@ theta_0 = 0
 
 
 times, y_heavy, y_light, theo_h, theo_l = balle_2(y_i, v_o, theta_0)
+# interpolate back to find when the 100 lb ball hit the ground (not below)
+t_ground = intrpf(0, y_heavy[-3:], times[-3:])
+light_height = intrpf(t_ground, times[-3:], y_light[-3:])
 
 plt.figure()
 plt.plot(times, y_heavy, label='100 lb ball')
@@ -96,8 +116,8 @@ plt.legend()
 plt.title('Height over time for different ball weights')
 plt.show()
 
-print('When the heavier ball hits the ground the two are ', y_light[-1]-y_heavy[-1], ' m apart')
-if ((y_light[-1]-y_heavy[-1])*100)/2.54 >= 2:
+print('When the heavier ball hits the ground the two are ', light_height, ' m apart')
+if ((light_height)*100)/2.54 >= 2:
 	print('Sadly for Galileo the small ball is not 2 inches away but ', ((y_light[-1]-y_heavy[-1])*100)/2.54, ' inches')
 else:
 	print('Galileo wins again, the wily bastard')
