@@ -12,16 +12,13 @@ def balle(y1,speed, theta):
 	r = np.copy(r1)
 	v = np.copy(v1)  # Set initial position and velocity, best to copy to avoid overwrites
 	#* Set physical parameters (mass, Cd, etc.)
-	# # Drag coefficient (dimensionless)
-	# if speed <= 14:
-	# 	Cd = 0.5
-	# else:
-	# 	Cd = 7.0/speed
+	
 	area = 0.002827;  # Cross-sectional area of projectile (m^2)
 	grav = 9.81;    # Gravitational acceleration (m/s^2)
 	mass = 0.04593;   # Mass of projectile (kg)
 
 	rho = 1.2;    # Density of air (kg/m^3)
+	Sw = [0, 0, 0.25]
 	# air_const = -0.5*Cd*rho*area/mass;  # Air resistance constant
 	#* Loop until ball hits ground or max steps completed
 	tau = 0.01
@@ -33,8 +30,8 @@ def balle(y1,speed, theta):
 		else:
 			Cd = 7.0/speed
 		air_const = -0.5*Cd*rho*area/mass;  # Air resistance constant
-		
-		magnus = .25*mass*v #magnus force
+		magnus = np.cross(Sw, [v[0], v[1], 0])
+		# magnus = .25*mass*v #magnus force
 		#* Record position (computed and theoretical) for plotting
 		t = (istep)*tau;     # Current time
 		if(istep ==0):
@@ -48,9 +45,9 @@ def balle(y1,speed, theta):
 			# xNoAir = np.append(xNoAir,r1[0] + v1[0]*t);   # Record trajectory for plot
 			# yNoAir = np.append(yNoAir,r1[1] + v1[1]*t - 0.5*grav*t**2);
 			#* Calculate the acceleration of the ball
-		accel = air_const*np.linalg.norm(v)*v;   # Air resistance
-		accel[0] = accel[0] + (magnus[0]/mass) # Magnus force
-		accel[1] = accel[1]-grav - (magnus[1]/mass);      # Gravity plus Magnus force
+		accel = air_const*np.linalg.norm(v)*v + magnus[:-1]   # Air resistance
+		accel[0] = accel[0]   # Magnus force
+		accel[1] = accel[1]-grav       # Gravity 
 		#* Calculate the new position and velocity using midpoint method
 		v_old = v 
 		v = v + tau*accel;
@@ -80,12 +77,13 @@ def balle_smooth(y1,speed, theta):
 
 	rho = 1.2;    # Density of air (kg/m^3)
 	air_const = -0.5*Cd*rho*area/mass;  # Air resistance constant
+	Sw = [0, 0, 0.25]
 	#* Loop until ball hits ground or max steps completed
 	tau = 0.01
 	maxstep = 10000;   # Maximum number of steps
 	for istep in range(0,maxstep):
 		
-		magnus = .25*mass*v #magnus force
+		magnus = np.cross(Sw, [v[0], v[1], 0]) #magnus force
 		#* Record position (computed and theoretical) for plotting
 		t = (istep)*tau;     # Current time
 		if(istep ==0):
@@ -99,9 +97,9 @@ def balle_smooth(y1,speed, theta):
 			# xNoAir = np.append(xNoAir,r1[0] + v1[0]*t);   # Record trajectory for plot
 			# yNoAir = np.append(yNoAir,r1[1] + v1[1]*t - 0.5*grav*t**2);
 			#* Calculate the acceleration of the ball
-		accel = air_const*np.linalg.norm(v)*v;   # Air resistance
-		accel[0] = accel[0] + (magnus[0]/mass) # Magnus force
-		accel[1] = accel[1]-grav - (magnus[1]/mass);      # Gravity plus Magnus force
+		accel = air_const*np.linalg.norm(v)*v+ magnus[:-1]   # Air resistance
+		accel[0] = accel[0] # Magnus force
+		accel[1] = accel[1]-grav      # Gravity plus Magnus force
 		#* Calculate the new position and velocity using midpoint method
 		v_old = v 
 		v = v + tau*accel;
@@ -117,7 +115,8 @@ def balle_smooth(y1,speed, theta):
 
 
 # create vector of angles to test
-angles = np.array([15, 30, 45, 60, 75])
+angles = np.array([1, 3, 5, 7, 10])
+angles_s = np.array([1,5,10, 15, 25])
 # set values for initial height, speed, etc
 y_i = 0
 v_o = 70
@@ -152,7 +151,7 @@ plt.legend()
 plt.show()
 
 plt.figure(2)
-for angle in angles:
+for angle in angles_s:
  	[range_ball, xvals, yvals] = balle_smooth(y_i, v_o, angle)
  	plt.plot(xvals, yvals, label=str(angle) + ' degrees')
 plt.xlabel('Range (m)')
