@@ -3,7 +3,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 # Benjamin Klimko, PHYS 416 Spring 2018
 #Code originally by Frank Toffoletto, edited by above
-#* Set initial position and velocity of the baseball
+
+# define interpolation functions
+def intrpf(xi, x, y):
+	yi = 0
+	for q in range(0, len(y)):
+		yi = yi + mult(xi, x, y, q)
+	return yi
+
+def mult(xi, x, y, q):
+	num = 1
+	denom = 1
+	xnew = np.delete(x,q)
+	for p in xnew:
+		num = num*(xi-p)
+		denom = denom*(x[q]-p)
+	y_out = num*y[q]/denom
+	return y_out
+
 def balle(y1,speed, theta):
 	r1 = np.array([0.0, y1]);     # Initial vector position
 
@@ -48,11 +65,11 @@ def balle(y1,speed, theta):
 			xplot = np.append(xplot,r[0]);   # Record trajectory for plot
 			yplot = np.append(yplot,r[1]);
 			break                 # Break out of the for loop
-	
-	return r[0]
+	out = intrpf(0, yplot[-3:], xplot[-3:])
+	return out 
 
 # create vector of angles to test
-angles = np.arange(10, 51, 0.5)
+angles = np.linspace(10, 50, 1000)
 # set values for initial height, speed, etc
 y_i = 1
 v_o = 50
