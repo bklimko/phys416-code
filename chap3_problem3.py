@@ -203,8 +203,10 @@ plt.grid(True)
 #%* Graph the energy of the comet versus time.
 plt.figure(2); plt.clf()   # Clear figure 2 window and bring forward
 totalE = kinetic + potential   # Total energy
-plt.plot(tplot,kinetic,'-.',tplot,potential,'--',tplot,totalE,'-')
-#plt.legend('Kinetic','Potential','Total')
+plt.plot(tplot,kinetic,'-.',label='Kinetic')#,tplot,potential,'--',label='Potential',tplot,totalE,'-', label='Total')
+plt.plot(tplot,potential,'--',label='Potential')
+plt.plot(tplot,totalE,'-', label='Total')
+plt.legend()
 plt.xlabel('Time (yr)'); plt.ylabel('Energy (M AU^2/yr^2)')
 plt.grid(True)
 plt.show()
