@@ -17,6 +17,10 @@ mass = 1
 q = 1 # charge
 # initial conditions
 r = np.array([0., 0.])
+xplot = np.array([0.])
+yplot = np.array([0.])
+xplot_mf = np.array([0.])
+yplot_mf = np.array([0.])
 v = np.array([0., 1.,0.])
 
 # get user inputs for time step and total simulation time
@@ -35,6 +39,8 @@ E = np.array([0.,0.,0.])
 # calculate E x B drift
 # v_eb = np.cross(E, B) / np.linalg.norm(B)**2
 
+# initialize counter
+cnt = 0
 
 #determine how many time steps to take
 # nSteps = int(np.ceil(est_gp / tau)) + 50  # for zero E field and constant B field
@@ -44,29 +50,21 @@ nSteps = int(np.ceil(totaltime/tau))
 for step in range(0, nSteps):
 	
 	# calculate B and del-B drift
-	B = np.array([0.,0., 1+(0.1*r[0])])
-	v_delb = ((mass*np.linalg.norm(v)**2) / (2 * q * np.linalg.norm(B))) * (np.cross(B, np.gradient(B)) / np.linalg.norm(B)**2)
+	if step == 0:
+		B = np.array([0.,0., 1+(0.1*xplot)])
+	else:
+		B = np.array([0.,0., 1+(0.1*xplot[-1])])
+	v_delb = ((mass*np.linalg.norm(v)**2) / (2 * q * np.linalg.norm(B))) * (np.cross(B, [0.1,0.,0.]) / np.linalg.norm(B)**2)
+	
 
 	# calculate acceleration
 	accel = (q * (E + np.cross(v, B))) / mass
 
-	if step == 0: # set up vectors of angle and radius data for plotting
-		rplot = np.linalg.norm(r)
-		thplot = np.arctan2(r[1],r[0])
-		xplot = r[0]
-		yplot = r[1]
-		xplot_mf = r[0]
-		yplot_mf = r[1]
-		
-		
-	else: # append new data to data vectors
-		rplot = np.append(rplot, np.linalg.norm(r))
-		thplot = np.append(thplot, np.arctan2(r[1],r[0]))
-		xplot = np.append(xplot, r[0])
-		yplot = np.append(yplot, r[1])
-		xplot_mf = np.append(xplot_mf, r[0]- (tau*v_delb[0]))
-		yplot_mf = np.append(yplot_mf, r[1] - (tau*v_delb[1]))
-		
+	xplot = np.append(xplot, r[0])
+	yplot = np.append(yplot, r[1])
+	xplot_mf = np.append(xplot_mf, r[0] - (tau*cnt*v_delb[0]))
+	yplot_mf = np.append(yplot_mf, r[1] - (tau*cnt*v_delb[1]))
+	cnt += 1
 
 	# Euler-Cromer step
 	v = v + tau*accel
@@ -91,5 +89,5 @@ plt.plot(xplot_mf, yplot_mf)
 plt.title('moving frame')
 plt.grid(True)
 plt.show()
-print ('Actual gyroperiod: ', step*tau, 's')
+
 

@@ -85,7 +85,8 @@ def gravrk(s,t,r0):
 	#%* Return derivatives [dr(1)/dt dr(2)/dt dv(1)/dt dv(2)/dt]
 	derivs = np.array([v[0], v[1], accel[0], accel[1]])
 	return derivs
-# orbit - Program to compute the orbit of a comet.
+# orbit - Program to compute the orbit of a comet with perturbing force
+# Benjamin Klimko, PHYS 416 Spring 2018
 
 # Set initial position and velocity of the comet.
 r0 = float(input("Enter initial radial distance (AU): "))
