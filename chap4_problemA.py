@@ -233,7 +233,6 @@ elif(option==6):
 	v0[1,1] = speeds[1]*np.cos(accels[1])
 	v0[2,0] = -speeds[2]*np.sin(accels[2])
 	v0[2,1] = speeds[2]*np.cos(accels[2])
-
 else:
 	# Euler collinear solution to  body problem
 	n_bodies = 3
