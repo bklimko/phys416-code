@@ -42,7 +42,7 @@ for istep in range(0,nstep):  ## MAIN LOOP ##
 		tt[1:(N-1)] = tt[1:(N-1)] + coeff*(tt[2:] + tt[0:(N-2)] - 2*tt[1:(N-1)])
 	else:
 		# Compute new temperature using the Richardson scheme
-		tt[1:(N-1)] = tt[1:(N-1)] + 2*coeff*(tt[2:] - tt[0:(N-2)] - 2*tt[1:(N-1)])
+		tt[1:(N-1)] = tt[1:(N-1)] + 2*coeff*(tt[2:] + tt[0:(N-2)] - 2*tt[1:(N-1)])
 	#* Periodically record temperature for plotting.
 	if( istep%plot_step < 1 ):   # Every plot_step steps and the first
 		ttplot = np.vstack((ttplot,tt))     # record tt(i) for plotting
