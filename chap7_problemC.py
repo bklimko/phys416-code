@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
-# wave_b - Program to solve the wave equation
+# wave_damped - Program to solve the wave equation
 # Benjamin Klimko, PHYS 416, Spring 2018
 #* Select numerical parameters (time step, grid spacing, etc.).
 
@@ -19,8 +19,17 @@ nStep = int(input('Enter number of steps: '))
 sigma = 0.1              # Width of the Gaussian pulse
 k_wave = np.pi/sigma        # Wave number of the cosine
 x = (np.arange(0,N)-1.)*h - L/2  # Coordinates of grid points
+x0 = -L/4
 # Initial condition is a Gaussian-cosine pulse
-a = np.cos(k_wave*(x-.4)) * np.exp(-(x-.4)**2/(2*sigma**2))
+a = np.zeros(len(x))
+idx = 0
+for each in x:
+	if each <= x0:
+		a[idx] = (each + L/2)/(x0 + L/2)
+		idx += 1
+	else:
+		a[idx] = 1 - ((each - x0)/(-x0 + L/2))
+		idx += 1
 a_new = np.zeros(len(a))
 a_old = np.copy(a)
 # Use Dirichlet boundary conditions
@@ -42,8 +51,7 @@ plotStep = max(1, np.floor(nStep/nplots)) # Number of steps between plots
 #* Loop over desired number of steps.
 for iStep in range(1,nStep+1):  ## MAIN LOOP ##
 	#* Compute new values of wave amplitude 
-
-	a_new[1:N-1] = (2*a[1:N-1] - a_old[1:N-1] + coeff*(a[ip] - 2*a[1:N-1] + a[im]))
+	a_new[1:N-1] = (((2+tau)*a[1:N-1] - a_old[1:N-1] + coeff*(a[ip] - 2*a[1:N-1] + a[im])))/(1 + tau)
 	a_new[0] = 0
 	a_new[N-1] = 0
 
