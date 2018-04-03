@@ -24,11 +24,11 @@ rho_max = 1.0                  # Maximum density
 Flow_max = 0.25*rho_max*v_max  # Maximum Flow
 a = 1/5
 sig = L/8
-p0 = rho_max/4 # change this to change traffic level
+p0 = rho_max/2 # change this to change traffic level
 # Initial condition is a cosine wave
 rho = np.zeros(N)
 for idx in range(0, len(rho)):
-	rho[idx] = p0*(1 + a*np.exp(-idx**2/(2*sig**2))
+	rho[idx] = p0*(1 + a*np.exp(-idx**2/(2*sig**2)))
 
 # Use periodic boundary conditions
 ip = np.arange(0,N)+1
