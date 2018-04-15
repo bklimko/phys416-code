@@ -45,35 +45,35 @@ changeDesired = 1.0e-4   # Stop when the change is given fraction
 print('Desired fractional change = ',changeDesired)
 change = np.array([])
 for iter in range(0,iterMax):
-changeSum = 0.0
-## SOR method ##
-for i in range(0,N):        # Loop over interior points only
-for j in range(0,N):
-if mask[j,i] == 1: # check if the point should have its solution computed
-	newphi = 0.25*omega*(phi[j,i+1]+phi[j,i-1]+ phi[j-1,i]+phi[j+1,i])  +  (1-omega)*phi[j,i]
-	changeSum = changeSum + abs(1-phi[j,i]/newphi)
-	phi[j,i] = newphi
-#* Check if fractional change is small enough to halt the iteration
-change = np.append(change,changeSum/(N-2)**2)
-if( iter%10 < 1 ):
-print('After %d iterations, fractional change = %f'%( iter,change[-1]))
-if( change[-1] < changeDesired ):
-print('Desired accuracy achieved after %d iterations'%iter)
-print('Breaking out of main loop')
-break
-# animate
-if(animate ==1 and iter%plot_interval<1):
-fig = plt.figure(2)   # Clear figure 2 window and bring forward
-plt.clf()
-ax = fig.gca(projection='3d')
-surf = ax.plot_surface(xx, yy, phi, rstride=1, cstride=1, 
-cmap=cm.jet,linewidth=0, antialiased=False)
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('potential after '+str(iter)+' iterations')
-plt.draw()
-plt.show()
-plt.pause(0.1)
+	changeSum = 0.0
+	## SOR method ##
+	for i in range(0,N):        # Loop over interior points only
+		for j in range(0,N):
+			if mask[j,i] == 1: # check if the point should have its solution computed
+				newphi = 0.25*omega*(phi[j,i+1]+phi[j,i-1]+ phi[j-1,i]+phi[j+1,i])  +  (1-omega)*phi[j,i]
+				changeSum = changeSum + abs(1-phi[j,i]/newphi)
+				phi[j,i] = newphi
+	#* Check if fractional change is small enough to halt the iteration
+	change = np.append(change,changeSum/(N-2)**2)
+	if( iter%10 < 1 ):
+		print('After %d iterations, fractional change = %f'%( iter,change[-1]))
+	if( change[-1] < changeDesired ):
+		print('Desired accuracy achieved after %d iterations'%iter)
+		print('Breaking out of main loop')
+		break
+	# animate
+	if(animate ==1 and iter%plot_interval<1):
+		fig = plt.figure(2)   # Clear figure 2 window and bring forward
+		plt.clf()
+		ax = fig.gca(projection='3d')
+		surf = ax.plot_surface(xx, yy, phi, rstride=1, cstride=1, 
+		cmap=cm.jet,linewidth=0, antialiased=False)
+		ax.set_xlabel('x')
+		ax.set_ylabel('y')
+		ax.set_zlabel('potential after '+str(iter)+' iterations')
+		plt.draw()
+		plt.show()
+		plt.pause(0.1)
 
 #* Plot final estimate of potential as contour and surface plots
 efield = -1*np.gradient(phi, axis=1)

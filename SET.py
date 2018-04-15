@@ -11,12 +11,12 @@ def tunnel_rate(delF, temp):
 
 # define parameters-- can change to allow for user inputs
 
-Cd = 1e-18 # Drain capacitance 
+Cd = 0.06e-18 # Drain capacitance 
 Cs = np.copy(Cd) # Source capacitance
-Cg = 1e-18 # Gate capacitance
-# Cb = np.copy(Cg) # Backgate capacitance
-Cb = 0
-Vg = 0.5 # Gate voltage
+Cg = 0.23e-18 # Gate capacitance
+Cb = np.copy(Cg) # Backgate capacitance
+
+Vg = 1 # Gate voltage
 Vb = 0 # Backgate voltage
 R = 1e6 # Junction resistance 
 T = 300 # Absolute temperature
@@ -39,7 +39,7 @@ Ids = np.zeros(len(Vdd)) # matrix to store drain-source current for plotting
 idx = 0 # indexing variable for loop
 
 for volt in Vdd: # MAIN LOOP-- go through every drain voltage
-	delta_F = (e/C) *(e/2 + volt*(C-Cd) + - Vg*Cg - Vb*Cb - n*e)
+	delta_F = (e/C) *(e/2 + volt*(C-Cd) - Vg*Cg - Vb*Cb - n*e)
 	prob = ((1/C)*(Vg*Cg + Vb*Cb + volt*Cd + n*e))/3
 
 	Ids[idx] = 2*e*prob*tunnel_rate(delta_F, T) # calculate Ids as in Ismail, AbdelRassoul

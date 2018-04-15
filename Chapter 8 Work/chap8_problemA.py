@@ -75,6 +75,8 @@ for iter in range(0,iterMax):
 	if boundary == 2:
 		phi[0,:] = phi[1,:]
 		phi[-1,:] = phi[-2,:]
+		phi[:,0] = 0
+		phi[:,-1] = phi0*np.ones(N)
 	#* Check if fractional change is small enough to halt the iteration
 	change = np.append(change,changeSum/(N-2)**2)
 	if( iter%10 < 1 ):
