@@ -16,12 +16,14 @@ Cs = np.copy(Cd) # Source capacitance
 Cg = 0.23e-18 # Gate capacitance
 Cb = np.copy(Cg) # Backgate capacitance
 
-Vg = 1 # Gate voltage
+Vg = 0 # Gate voltage
 Vb = 0 # Backgate voltage
 R = 1e6 # Junction resistance 
 T = 300 # Absolute temperature
 n = 3 # number of states
 kb = 1.381e-23 # Boltzmann constant (J/K)
+
+# uncomment below to allow for user input of parameters instead of hardcoding
 
 # Cd = float(input('Enter Cd in Farads: ')) # Drain capacitance 
 # Cs = float(input('Enter Cs in Farads: ')) # Source capacitance
@@ -39,10 +41,10 @@ Ids = np.zeros(len(Vdd)) # matrix to store drain-source current for plotting
 idx = 0 # indexing variable for loop
 
 for volt in Vdd: # MAIN LOOP-- go through every drain voltage
-	delta_F = (e/C) *(e/2 + volt*(C-Cd) - Vg*Cg - Vb*Cb - n*e)
-	prob = ((1/C)*(Vg*Cg + Vb*Cb + volt*Cd + n*e))/3
+	delta_F = (e/C) *(e/2 + volt*(C-Cd) - Vg*Cg - Vb*Cb - n*e) # calculate change in free energy related to tunneling event
+	prob = ((1/C)*(Vg*Cg + Vb*Cb + volt*Cd + n*e))/3 # occupation probability as in Ismail and Abdelrassoul
 
-	Ids[idx] = 2*e*prob*tunnel_rate(delta_F, T) # calculate Ids as in Ismail, AbdelRassoul
+	Ids[idx] = 2*e*prob*tunnel_rate(delta_F, T) # calculate Ids as in Ismail and Abdelrassoul
 	idx += 1 # update index variable
 
 
